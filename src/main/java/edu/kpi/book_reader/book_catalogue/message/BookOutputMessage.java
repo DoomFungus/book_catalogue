@@ -20,12 +20,15 @@ public class BookOutputMessage {
     private String summary;
     @JsonProperty
     private Collection<String> authors;
+    @JsonProperty("average_rating")
+    private Double averageRating;
 
     public static BookOutputMessage fromBook(Book book){
         BookOutputMessage message = new BookOutputMessage();
         message.setId(book.getId());
         message.setName(book.getName());
         message.setSummary(book.getSummary());
+        message.setAverageRating(book.getAverageRating());
         message.authors = new ArrayList<>();
         for(Author author: book.getAuthors()){
             message.authors.add(author.getName());

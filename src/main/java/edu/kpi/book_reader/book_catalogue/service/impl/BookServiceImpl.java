@@ -5,8 +5,8 @@ import edu.kpi.book_reader.book_catalogue.model.Book;
 import edu.kpi.book_reader.book_catalogue.repository.BookRepository;
 import edu.kpi.book_reader.book_catalogue.service.AuthorService;
 import edu.kpi.book_reader.book_catalogue.service.BookService;
+import edu.kpi.book_reader.book_catalogue.service.ReviewService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -19,16 +19,23 @@ import java.util.Optional;
 public class BookServiceImpl implements BookService {
     BookRepository bookRepository;
     AuthorService authorService;
+    ReviewService reviewService;
 
     @Autowired
-    public BookServiceImpl(BookRepository bookRepository, AuthorService authorService) {
+    public BookServiceImpl(BookRepository bookRepository, AuthorService authorService, ReviewService reviewService) {
         this.bookRepository = bookRepository;
         this.authorService = authorService;
+        this.reviewService = reviewService;
     }
 
     @Override
     public Optional<Book> findById(Integer id) {
-        return bookRepository.findById(id);
+        Optional<Book> book = bookRepository.findById(id);
+        book.ifPresent(x -> {
+            Double rating = reviewService.findAverageRatingForBook(x.getId());
+            x.setAverageRating(rating);
+        });
+        return book;
     }
 
     @Override
@@ -40,7 +47,12 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public Optional<Book> findByName(String name) {
-        return bookRepository.findByName(name);
+        Optional<Book> book = bookRepository.findByName(name);
+        book.ifPresent(x -> {
+            Double rating = reviewService.findAverageRatingForBook(x.getId());
+            x.setAverageRating(rating);
+        });
+        return book;
     }
 
     @Override

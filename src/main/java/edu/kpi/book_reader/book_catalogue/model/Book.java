@@ -27,4 +27,6 @@ public class Book {
             joinColumns = @JoinColumn(name = "book_id"),
             inverseJoinColumns = @JoinColumn(name = "author_id"))
     private Collection<Author> authors= new ArrayList<>();
+    @Transient
+    private Double averageRating;
 }
