@@ -1,4 +1,6 @@
 spring:
+    application:
+        name: catalogue-service
     datasource:
         url: ${DATASOURCE_URL}
         driver-class-name: org.postgresql.Driver
@@ -6,3 +8,15 @@ spring:
         username: ${DATASOURCE_USERNAME}
 server:
     port: 80
+eureka:
+    client:
+        serviceUrl:
+            defaultZone: ${EUREKA_URL}/eureka/
+    instance:
+        statusPageUrlPath: /actuator/info
+        healthCheckUrlPath: /actuator/health
+        hostname: ${DOMAIN_NAME}
+        non-secure-port-enabled: true
+        non-secure-port: 80
+        health-check-url: https://${eureka.instance.hostname}${eureka.instance.healthCheckUrlPath}
+        status-page-url: https://${eureka.instance.hostname}${eureka.instance.statusPageUrlPath}

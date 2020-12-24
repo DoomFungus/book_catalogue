@@ -18,7 +18,6 @@ public class BookInputMessage {
     @JsonProperty
     private Collection<String> authors;
 
-
     public Book toBook(){
         Book book = new Book();
         book.setName(name);
